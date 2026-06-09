@@ -24,6 +24,8 @@ public class Curso {
 
     @Column(name = "DESCRIPCION", length = 200)
     private String descripcion;
+    @Column(name = "CREDITOS", nullable = false)
+    private Integer creditos;
 
 
 

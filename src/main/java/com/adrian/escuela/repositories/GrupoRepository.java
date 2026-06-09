@@ -6,13 +6,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GrupoRepository extends JpaRepository<Grupo, Long> {
-    boolean existsByCurso_IdAndMaestro_IdAndAula_IdAndPeriodoAndIdNot(
-            Long cursoId,
-            Long maestroId,
-            Long aulaId,
-            String periodo,
-            Long id
+    boolean existsByMaestroId(Long idMaestro
     );
+    boolean existsByAulaId(Long idAula);
     boolean existsByCurso_IdAndMaestro_IdAndAula_IdAndPeriodo(
            Long cursoId,
            Long maestroId,
