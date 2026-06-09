@@ -14,7 +14,8 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalHanldlerException {
+public class GlobalHandlerException {
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<CustomErrorResponse> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("Error en la peticion {}", e.getMessage());
@@ -22,12 +23,14 @@ public class GlobalHanldlerException {
                 new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage())
         );
     }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<CustomErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
         log.error("Violación de restricción: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), "Violación de restricción: " + e.getMessage()));
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CustomErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String mensaje = e.getBindingResult().getFieldErrors().stream()
@@ -38,6 +41,7 @@ public class GlobalHanldlerException {
         return ResponseEntity.badRequest()
                 .body(new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), mensaje));
     }
+
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<CustomErrorResponse> handleIllegalStateException(IllegalStateException e) {
         log.error("Error en el estado de la petición: {}", e.getMessage());
@@ -46,7 +50,7 @@ public class GlobalHanldlerException {
         );
     }
 
-    @ExceptionHandler(EntidadRelacionada.class)
+    @ExceptionHandler(EntidadRelacionadaException.class)
     public ResponseEntity<CustomErrorResponse> handleEntidadRelacionadaException(EntidadRelacionadaException e) {
         log.warn("Error al eliminar un recurso: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
