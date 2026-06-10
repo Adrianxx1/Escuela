@@ -1,5 +1,6 @@
 package com.adrian.escuela.entities;
 
+import com.adrian.escuela.utils.StringCustomUtils;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Getter @Setter
-@Table(name = "ALUMNO")
+@Table(name = "ALUMNOS")
 public class Alumno {
 
     @Id
@@ -41,4 +42,22 @@ public class Alumno {
     @Builder.Default
     @OneToMany(mappedBy = "alumno")
     private List<Inscripcion> inscripciones = new ArrayList<>();
+
+    public void actualizar(String nombre, String apellidoPaterno, String apellidoMaterno) {
+        validarDatos(nombre, apellidoPaterno, apellidoMaterno);
+        this.nombre = nombre.trim();
+        this.apellidoPaterno = apellidoPaterno.trim();
+        this.apellidoMaterno = apellidoMaterno.trim();
+    }
+
+    private void validarDatos(String nombre, String apellidoPaterno, String apellidoMaterno) {
+        StringCustomUtils.validarTamanio(nombre.trim(), 4, 50,
+                "El nombre es requerido y debe tener entre 4 y 50 caracteres");
+
+        StringCustomUtils.validarTamanio(apellidoPaterno.trim(), 4, 50,
+                "El apellido paterno es requerido y debe tener entre 4 y 50 caracteres");
+
+        StringCustomUtils.validarTamanio(apellidoMaterno.trim(), 4, 50,
+                "El apellido materno es requerido y debe tener entre 4 y 50 caracteres");
+    }
 }
