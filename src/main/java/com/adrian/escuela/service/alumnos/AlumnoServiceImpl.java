@@ -42,7 +42,6 @@ public class AlumnoServiceImpl implements AlumnoService {
     public AlumnoResponse registrar(AlumnoRequest request) {
         log.info("Registrando nuevo alumno...");
 
-        // 1. Generamos matricula y email llamando las funciones Oracle
         String matricula = alumnoRepository.generarMatricula(
                 request.nombre(),
                 request.apellidoPaterno(),
@@ -53,10 +52,8 @@ public class AlumnoServiceImpl implements AlumnoService {
                 request.apellidoPaterno(),
                 request.apellidoMaterno());
 
-        // 2. Validamos que no existan duplicados
         validarDatosUnicos(email, matricula);
 
-        // 3. Construimos la entidad y asignamos los campos generados
         Alumno alumno = alumnoMapper.requestAEntidad(request);
         alumno.setEmail(email);
         alumno.setMatricula(matricula);
@@ -73,7 +70,6 @@ public class AlumnoServiceImpl implements AlumnoService {
 
         log.info("Actualizando alumno con id: {}", id);
 
-        // Email y matricula no cambian al actualizar
         alumno.actualizar(
                 request.nombre(),
                 request.apellidoPaterno(),
