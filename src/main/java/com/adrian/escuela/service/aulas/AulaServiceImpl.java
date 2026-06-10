@@ -96,4 +96,5 @@ public class AulaServiceImpl implements AulaService {
             if (aulaRepository.existsByNombreIgnoreCaseAndIdNot(request.nombre().trim(), id))
                 throw new IllegalArgumentException("Ya existe un aula registrada con el nombre: " + request.nombre());
 
-}}
+        }
+    }
