@@ -15,9 +15,10 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> 
             Long id
     );
 
-    // Si también necesitas buscar solo por alumno y grupo (para registros nuevos)
+
     boolean existsByAlumno_IdAndGrupo_Id(
             Long alumnoId,
             Long grupoId
     );
+    boolean existsByAlumno_Id(Long alumnoId);
 }
