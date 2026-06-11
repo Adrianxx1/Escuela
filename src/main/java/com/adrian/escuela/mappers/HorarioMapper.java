@@ -33,7 +33,7 @@ public class HorarioMapper implements CommonMapper<HorarioRequest, HorarioRespon
         );
 
         String horarioFormateado = entidad.getDiaSemana().getDescripcion() + " " +
-                entidad.getHoraInicio() + " " +
+                entidad.getHoraInicio() + " - " +
                 entidad.getHoraFin();
 
         return new HorarioResponse(
@@ -41,16 +41,5 @@ public class HorarioMapper implements CommonMapper<HorarioRequest, HorarioRespon
                 datosGrupo,
                 horarioFormateado
         );
-    }
-
-    public HorarioResponse rowAResponse(Object[] row) {
-        String horarioFormateado = row[2] + " " + row[3] + " " + row[4];
-        DatosGrupo datosGrupo = new DatosGrupo(
-                (String) row[0],  // CURSO
-                null,             // maestro no viene en esta query
-                (String) row[1],  // AULA
-                null              // periodo no viene en esta query
-        );
-        return new HorarioResponse(null, datosGrupo, horarioFormateado);
     }
 }

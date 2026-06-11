@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -30,9 +31,10 @@ public class HorarioServiceImpl implements HorarioService {
     @Transactional(readOnly = true)
     public List<HorarioResponse> listar() {
         log.info("Listado de todos los horarios solicitado");
-        return horarioRepository.listarHorariosOrdenados()
-                .stream()
-                .map(horarioMapper::rowAResponse)
+        return horarioRepository.findAll().stream()
+                .sorted(Comparator.comparingInt(h ->
+                        h.getDiaSemana().ordinal()))
+                .map(horarioMapper::entidadAResponse)
                 .toList();
     }
 
@@ -105,7 +107,8 @@ public class HorarioServiceImpl implements HorarioService {
 
     private void validarHoras(String horaInicio, String horaFin) {
         if (horaFin.compareTo(horaInicio) <= 0)
-            throw new IllegalArgumentException("La hora de fin debe ser posterior a la hora de inicio");
+            throw new IllegalArgumentException(
+                    "La hora de fin debe ser posterior a la hora de inicio");
     }
 
     private void validarTraslapeGrupo(Long grupoId, String dia,
