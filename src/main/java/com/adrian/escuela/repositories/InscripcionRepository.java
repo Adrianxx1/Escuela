@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> {
 
-    // Verifica si ya existe una inscripción del mismo alumno en el mismo grupo,
-    // excluyendo el registro actual (para validaciones en actualizaciones)
     boolean existsByAlumno_IdAndGrupo_IdAndIdNot(
             Long alumnoId,
             Long grupoId,
@@ -21,4 +19,5 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> 
             Long grupoId
     );
     boolean existsByAlumno_Id(Long alumnoId);
+    boolean existsByGrupo_Id(Long grupoId);
 }
