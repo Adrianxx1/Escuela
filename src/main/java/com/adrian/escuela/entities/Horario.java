@@ -22,7 +22,7 @@ public class Horario {
     private Grupo grupo;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "DIA", nullable = false)
+    @Column(name = "DIA", nullable = false, length = 10)
     private DiaSemana diaSemana;
 
     @Column(name = "HORA_INICIO", length = 5, nullable = false)
