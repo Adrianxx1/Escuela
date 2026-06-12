@@ -3,8 +3,10 @@ package com.adrian.escuela.exceptions;
 import com.adrian.escuela.dto.CustomErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -76,6 +78,31 @@ public class GlobalHandlerException {
         log.warn("No se encontró el recurso: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<CustomErrorResponse> handleDataIntegrityViolation(
+            DataIntegrityViolationException e) {
+        String mensaje = e.getMostSpecificCause().getMessage();
+        if (mensaje != null && mensaje.contains("ORA-20001"))
+            mensaje = "No se puede inscribir, cupo lleno";
+        else
+            mensaje = "Violación de integridad de datos";
+        log.error("Error de integridad: {}", mensaje);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new CustomErrorResponse(HttpStatus.CONFLICT.value(), mensaje));
+    }
+
+    @ExceptionHandler(JpaSystemException.class)
+    public ResponseEntity<CustomErrorResponse> handleJpaSystemException(JpaSystemException e) {
+        String mensaje = e.getMostSpecificCause().getMessage();
+        if (mensaje != null && mensaje.contains("ORA-20001"))
+            mensaje = "No se puede inscribir, cupo lleno";
+        else
+            mensaje = "Error en la base de datos";
+        log.error("Error JPA del sistema: {}", mensaje);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new CustomErrorResponse(HttpStatus.CONFLICT.value(), mensaje));
     }
 
     @ExceptionHandler(Exception.class)
